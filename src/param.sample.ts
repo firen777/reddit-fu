@@ -4,6 +4,7 @@ export const params = {
    */
   overwriteStr: [
     `https://i.redd.it/e6l2hf0avg5b1.jpg`, 
+    //#region 
     `# Few words on lemmy
 
 src: https://old.reddit.com/r/apolloapp/comments/14kf7w4/i_feel_like_im_being_robbed_losing_apollo_so_long/jpsnqjw/
@@ -50,7 +51,8 @@ And before anyone says to join another instance that they do not administer, any
 
 [Read more here](https://raddle.me/f/lobby/159606/-/comment/294792)
 `,
-
+    //#endregion
+    //#region 
     `# Few words on lemmy
 
 This mastodon thread should tell you what kind of crowds you are looking at: https://mstdn.social/@feditips/106835057054633379
@@ -59,6 +61,52 @@ Further more, take a look at the most ~~populated and~~ promoted instance, lemmy
 
 Also, look at this funny post: https://raddle.me/f/TankiesGonnaTank/127114/-/comment/205326
 `,
+    //#endregion
+    //#region 
+    `# Lemmy.ml is blocking all requests from /kbin Instances
+
+src: https://kbin.social/m/kbinMeta/t/104218
+
+I discovered yesterday evening that Lemmy.ml is blocking all inbound ActivityPub requests from /kbin instances. Specifically, a 403 'access denied' is returned when the user agent contains "kbinBot" anywhere in the string. This has been causing a cascade of failures with federation for many server owners, flooding the message queue with transport errors.
+
+This doesn't appear to be a mistake; it has been done very deliberately, only on Lemmy.ml. Lemmy.world and other large instances do not exhibit the same behavior. It also isn't a side effect of the bug introduced in Lemmy 0.18. You can observe by sending the following in a terminal
+
+    > curl -I --user-agent "kbinBot v0.1" https://lemmy.world/u/test
+    HTTP/2 200
+    [...]
+
+    > curl -I --user-agent "kbinBot v0.1" https://lemmy.ml/u/test                                
+    HTTP/2 403
+    [...]
+
+    > curl -I --user-agent "notKbinBot v0.1" https://lemmy.ml/u/test
+    HTTP/2 403
+    [...]
+
+    > curl -I --user-agent "placeholder-user-agent" https://lemmy.ml/u/test
+    HTTP/2 200
+    [...]
+
+Additional evidence of this not being a Lemmy 0.18 bug:
+
+- This occurs when making web requests to any location on the Lemmy.ml webserver, not just ActivityPub endpoints.
+
+- Go to https://fedidb.org/software/lemmy and pick an instance running 0.18.0. Perform the above commands, replacing the URL for Lemmy.ml with that particular instance's address.
+
+If this continues, my instance may need to defederate from Lemmy.ml. This is especially problematic because Lemmy.ml continues to federate information outbound to other kbin instances while refusing to allow inbound communication from them.
+
+Spoofing the user agent is less than ideal, and doesn't respect Lemmy.ml's potential wish to not be contacted by /kbin instances. I don't post this to create division between communities, but I do hope that I can draw awareness to what's going on here. Defederating /kbin instances entirely would even be better than arbitrarily denying access one-way. This said, we should all attempt to maintain a good-faith interpretation until otherwise indicated by the Lemmy developers. It's possibel that this is a firewall misconfiguration or some other webserver-related bug.
+
+Relevant comment from me (#354 - [BUG] Critical errors/failed messages during messenger:consume)
+
+Edits:
+
+- Yes, people have already tried reaching out to the Lemmy instance admins in their Matrix room with no answer.
+
+- Someone has posed a question on Lemmy.ml about the block here: https://lemmy.ml/post/1563840
+    
+`
+    //#endregion
   ],
   /**
    * pool of random comment to drawn from. This pool will get zalgoified in an attempt to beat censorship

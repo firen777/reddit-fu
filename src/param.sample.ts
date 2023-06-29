@@ -125,7 +125,11 @@ Edits:
   /** range of comments to overwrite.
    * 
    */
-  overwriteRange: [[0,30], [33,49], [51,56]]
+  overwriteRange: [[0,30], [33,49], [51,56]],
+  /**
+   * randomly choose between 0 to waitms millisecond
+   */
+  waitms: 5000,
 }
 
 const x = 's';
